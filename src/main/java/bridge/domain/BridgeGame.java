@@ -14,10 +14,12 @@ public class BridgeGame {
     private List<String> upLine = new ArrayList<>();
     private List<String> downLine = new ArrayList<>();
     private int round;
+    private int trialCount;
 
     public BridgeGame(List<String> bridges) {
         this.bridges = bridges;
         this.round = 0;
+        this.trialCount = 1;
     }
 
     public List<String> getUpLine() {
@@ -30,6 +32,10 @@ public class BridgeGame {
 
     public int getRound() {
         return round;
+    }
+
+    public int getTrialCount() {
+        return trialCount;
     }
 
     public void move(String direction) {
@@ -46,6 +52,7 @@ public class BridgeGame {
         upLine.clear();
         downLine.clear();
         round = 0;
+        trialCount++;
     }
 
     public void quit() {
