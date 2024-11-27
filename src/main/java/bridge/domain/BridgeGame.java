@@ -48,12 +48,16 @@ public class BridgeGame {
         round = 0;
     }
 
+    public void quit() {
+        round = bridges.size();
+    }
+
     public boolean isRoundOver() {
-        return round + 1 == bridges.size();
+        return round == bridges.size();
     }
 
     public boolean isFailure(String direction) {
-        return !isSuccess(direction);
+        return upLine.contains(FAIL) || downLine.contains(FAIL);
     }
 
     private boolean isSuccess(String direction) {

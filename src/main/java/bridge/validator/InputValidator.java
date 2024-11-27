@@ -15,6 +15,20 @@ public class InputValidator {
         return size;
     }
 
+    public static String validateUpAndDown(String input) {
+        if (!input.equals("U") && !input.equals("D")) {
+            throw new BridgeException(ErrorMessage.INVALID_INPUT);
+        }
+        return input;
+    }
+
+    public static String validateRetryAndQuit(String input) {
+        if (!input.equals("R") && !input.equals("Q")) {
+            throw new BridgeException(ErrorMessage.INVALID_INPUT);
+        }
+        return input;
+    }
+
     private static int parseNumber(String input) {
         try {
             return Integer.parseInt(input);

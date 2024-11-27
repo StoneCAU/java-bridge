@@ -50,9 +50,10 @@ public class BridgeController {
             bridgeGame.move(direction);
             outputView.printMap(bridgeGame.getUpLine(), bridgeGame.getDownLine());
             if (bridgeGame.isFailure(direction)) {
-                break;
+                bridgeGame = proceedCommand(bridgeGame);
             }
         }
+        outputView.printResult(bridgeGame);
     }
 
     private String getDirection() {
@@ -65,7 +66,23 @@ public class BridgeController {
         }
     }
 
-    private String getRetry() {
-        return null;
+    private BridgeGame proceedCommand(BridgeGame bridgeGame) {
+        String command = getRetryOrQuit();
+        if (command.equals("R")) {
+            bridgeGame.retry();
+            return bridgeGame;
+        }
+        bridgeGame.quit();
+        return bridgeGame;
+    }
+
+    private String getRetryOrQuit() {
+        while (true) {
+            try {
+                return inputView.readGameCommand();
+            } catch (BridgeException e) {
+                outputView.printErrorMessage(e.getMessage());
+            }
+        }
     }
 }

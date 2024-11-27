@@ -1,5 +1,6 @@
 package bridge.view;
 
+import bridge.domain.BridgeGame;
 import java.util.List;
 
 public class OutputView {
@@ -14,12 +15,29 @@ public class OutputView {
         System.out.println(makeLineString(downLine));
     }
 
-    public void printResult() {
+    public void printResult(BridgeGame bridgeGame) {
+        System.out.println("최종 게임 결과");
+        printMap(bridgeGame.getUpLine(), bridgeGame.getDownLine());
+        printNewLine();
+        printSuccessOrFail(bridgeGame);
+        printTotalTrial(bridgeGame);
     }
 
     public void printErrorMessage(String message) {
         printNewLine();
         System.out.println(message);
+    }
+
+    private void printTotalTrial(BridgeGame bridgeGame) {
+        System.out.printf("총 시도한 횟수: %d%n", bridgeGame.getDownLine().size());
+    }
+
+    private void printSuccessOrFail(BridgeGame bridgeGame) {
+        if (bridgeGame.getUpLine().contains("X") || bridgeGame.getDownLine().contains("X")) {
+            System.out.println("게임 성공 여부: 실패");
+            return;
+        }
+        System.out.println("게임 성공 여부 : 성공");
     }
 
     private String makeLineString(List<String> lines) {
