@@ -1,23 +1,84 @@
 package bridge.domain;
 
-/**
- * 다리 건너기 게임을 관리하는 클래스
- */
-public class BridgeGame {
+import java.util.ArrayList;
+import java.util.List;
 
-    /**
-     * 사용자가 칸을 이동할 때 사용하는 메서드
-     * <p>
-     * 이동을 위해 필요한 메서드의 반환 타입(return type), 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
-     */
-    public void move() {
+public class BridgeGame {
+    private final static String UP = "U";
+    private final static String DOWN = "D";
+    private final static String BLANK = " ";
+    private final static String SUCCESS = "O";
+    private final static String FAIL = "X";
+
+    private List<String> bridges;
+    private List<String> upLine = new ArrayList<>();
+    private List<String> downLine = new ArrayList<>();
+    private int round;
+
+    public BridgeGame(List<String> bridges) {
+        this.bridges = bridges;
+        this.round = 0;
     }
 
-    /**
-     * 사용자가 게임을 다시 시도할 때 사용하는 메서드
-     * <p>
-     * 재시작을 위해 필요한 메서드의 반환 타입(return type), 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
-     */
+    public List<String> getUpLine() {
+        return upLine;
+    }
+
+    public List<String> getDownLine() {
+        return downLine;
+    }
+
+    public int getRound() {
+        return round;
+    }
+
+    public void move(String direction) {
+        if (isSuccess(direction)) {
+            addToSuccessLine(direction);
+            round++;
+            return;
+        }
+        addToFailLine(direction);
+        round++;
+    }
+
     public void retry() {
+        upLine.clear();
+        downLine.clear();
+        round = 0;
+    }
+
+    public boolean isRoundOver() {
+        return round + 1 == bridges.size();
+    }
+
+    public boolean isFailure(String direction) {
+        return !isSuccess(direction);
+    }
+
+    private boolean isSuccess(String direction) {
+        return bridges.get(round).equals(direction);
+    }
+
+    private void addToSuccessLine(String direction) {
+        if (direction.equals(UP)) {
+            upLine.add(SUCCESS);
+            downLine.add(BLANK);
+        }
+        if (direction.equals(DOWN)) {
+            downLine.add(SUCCESS);
+            upLine.add(BLANK);
+        }
+    }
+
+    private void addToFailLine(String direction) {
+        if (direction.equals(UP)) {
+            upLine.add(FAIL);
+            downLine.add(BLANK);
+        }
+        if (direction.equals(DOWN)) {
+            downLine.add(FAIL);
+            upLine.add(BLANK);
+        }
     }
 }

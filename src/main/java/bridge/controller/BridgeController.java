@@ -1,8 +1,12 @@
 package bridge.controller;
 
+import bridge.domain.BridgeGame;
+import bridge.domain.BridgeMaker;
 import bridge.exception.BridgeException;
+import bridge.generator.BridgeRandomNumberGenerator;
 import bridge.view.InputView;
 import bridge.view.OutputView;
+import java.util.List;
 
 public class BridgeController {
     private final InputView inputView;
@@ -15,8 +19,7 @@ public class BridgeController {
 
     public void run() {
         outputView.printStartMessage();
-        int bridgeSize = getBridgeSize();
-
+        gameStart();
     }
 
     private int getBridgeSize() {
@@ -27,5 +30,42 @@ public class BridgeController {
                 outputView.printErrorMessage(e.getMessage());
             }
         }
+    }
+
+    private void gameStart() {
+        int bridgeSize = getBridgeSize();
+        List<String> bridges = makeBridge(bridgeSize);
+        BridgeGame bridgeGame = new BridgeGame(bridges);
+        gamePlay(bridgeGame);
+    }
+
+    private List<String> makeBridge(int size) {
+        BridgeMaker bridgeMaker = new BridgeMaker(new BridgeRandomNumberGenerator());
+        return bridgeMaker.makeBridge(size);
+    }
+
+    private void gamePlay(BridgeGame bridgeGame) {
+        while (!bridgeGame.isRoundOver()) {
+            String direction = getDirection();
+            bridgeGame.move(direction);
+            outputView.printMap(bridgeGame.getUpLine(), bridgeGame.getDownLine());
+            if (bridgeGame.isFailure(direction)) {
+                break;
+            }
+        }
+    }
+
+    private String getDirection() {
+        while (true) {
+            try {
+                return inputView.readMoving();
+            } catch (BridgeException e) {
+                outputView.printErrorMessage(e.getMessage());
+            }
+        }
+    }
+
+    private String getRetry() {
+        return null;
     }
 }
